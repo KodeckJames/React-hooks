@@ -1,25 +1,45 @@
 import './App.css';
-import react, { useState } from 'react';
+import { useState, useEffect } from 'react';
+//Everything in the callbck function in the useEffect hook will execute every time our app renders
+//It takes a second parameter which is a dependency array, which allows the page to only re render when a specific resource on your page changes
+//The return statement in the useState function is used as a cleanup as when the code in the useEffect is executed, the code in the return is run first then the code above it, to "clean up" what we did the last time
 
 
 function App() {
-  const [count, setCount] = useState(4);
-  const [theme, setTheme] = useState('Purple');
-  const add=()=>{
-    setCount(prevcount => prevcount + 1)
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const handleSize = () => {
+    setWindowWidth(window.innerWidth)
   }
-  const subtract=()=>{
-    setCount(prevcount => prevcount - 1)
+  useEffect(() => {
+    window.addEventListener('resize', handleSize)
+    return () => {
+      window.removeEventListener('resize', handleSize)
+    }
+  }, [])
+  // const [resourceType, setResourceType] = useState("posts");
+  // const [items, setItems] = useState([]);
+  // useEffect(() => {
+  //   fetch(`https://jsonplaceholder.typicode.com/${resourceType}`)
+  //     .then(response => response.json())
+  //     .then(json => setItems(json))
     
-  }
+  // }, [resourceType]);
 
   return (
-    <div className='flex flex-1 justify-center items-center h-screen'>
-      <button className='bg-blue-500 p-4 rounded text-white' onClick={add}>+</button>
-      <span className=' p-2 font-bold text-xl'>{count}</span>
-      <span className=' p-4'>{theme}</span>
-      <button className='bg-blue-500 p-4 rounded text-white' onClick={subtract}>-</button>
+    <div>
+      {windowWidth}
     </div>
+    // <>
+    // <div className='flex flex-1 '>
+    //   <button className='bg-gray-500 p-4 rounded text-black' onClick={()=>setResourceType('Posts')}>Posts</button>
+    //   <button className='bg-gray-500 p-4 rounded text-black' onClick={()=>setResourceType('Users')}>Users</button>
+    //   <button className='bg-gray-500 p-4 rounded text-black' onClick={()=>setResourceType('Comments')}>Comments</button>
+    // </div>
+    //   <h1>{resourceType}</h1>   
+    //   {items.map(item => {
+    //     return <pre>{JSON.stringify(item)}</pre>
+    // })}  
+    // </>
   );
 }
 
